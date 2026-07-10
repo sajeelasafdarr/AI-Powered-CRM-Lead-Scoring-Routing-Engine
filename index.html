@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Sales — Sage AI</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0f0f0f;
+    --surface:   #1a1a1a;
+    --border:    #2a2a2a;
+    --border-focus: #7c3aed;
+    --text:      #f0f0f0;
+    --muted:     #888;
+    --accent:    #7c3aed;
+    --accent-hover: #6d28d9;
+    --error:     #ef4444;
+    --success:   #10b981;
+    --radius:    8px;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 520px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 2rem;
+  }
+
+  .logo-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .logo-text span {
+    color: var(--accent);
+  }
+
+  h1 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+
+  .field {
+    margin-bottom: 1.25rem;
+  }
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #ccc;
+    margin-bottom: 6px;
+  }
+
+  label .req {
+    color: var(--accent);
+    margin-left: 2px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  select,
+  textarea {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.15s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  select:focus,
+  textarea:focus {
+    border-color: var(--border-focus);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #444;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  select option {
+    background: #1a1a1a;
+    color: #f0f0f0;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.5;
+  }
+
+  .field-error {
+    font-size: 12px;
+    color: var(--error);
+    margin-top: 4px;
+    display: none;
+  }
+
+  .field.has-error input,
+  .field.has-error select,
+  .field.has-error textarea {
+    border-color: var(--error);
+  }
+
+  .field.has-error .field-error {
+    display: block;
+  }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.15s, opacity 0.15s;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .submit-btn:hover:not(:disabled) { background: var(--accent-hover); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .success-state {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  .success-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(16,185,129,0.1);
+    border: 1px solid rgba(16,185,129,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin: 0 auto 1.25rem;
+  }
+
+  .success-state h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .success-state p {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .error-banner {
+    background: rgba(239,68,68,0.1);
+    border: 1px solid rgba(239,68,68,0.3);
+    border-radius: var(--radius);
+    color: #fca5a5;
+    font-size: 13px;
+    padding: 10px 14px;
+    margin-bottom: 1rem;
+    display: none;
+  }
+
+  .privacy {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    margin-top: 1.25rem;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">🤖</div>
+    <div class="logo-text">Sage <span>AI</span></div>
+  </div>
+
+  <div id="form-view">
+    <h1>Contact Sales</h1>
+    <p class="subtitle">Tell us about your business and we'll get back to you within one business day.</p>
+
+    <div class="error-banner" id="error-banner">Something went wrong. Please try again.</div>
+
+    <div class="field" id="field-full_name">
+      <label>Full Name <span class="req">*</span></label>
+      <input type="text" id="full_name" placeholder="Sarah Chen" autocomplete="name" />
+      <div class="field-error">Please enter your full name</div>
+    </div>
+
+    <div class="field" id="field-work_email">
+      <label>Work Email <span class="req">*</span></label>
+      <input type="email" id="work_email" placeholder="sarah@company.com" autocomplete="email" />
+      <div class="field-error">Please enter a valid work email</div>
+    </div>
+
+    <div class="field" id="field-company_name">
+      <label>Company Name <span class="req">*</span></label>
+      <input type="text" id="company_name" placeholder="Acme Corp" autocomplete="organization" />
+      <div class="field-error">Please enter your company name</div>
+    </div>
+
+    <div class="field" id="field-job_title">
+      <label>Job Title <span class="req">*</span></label>
+      <input type="text" id="job_title" placeholder="VP of Sales" autocomplete="organization-title" />
+      <div class="field-error">Please enter your job title</div>
+    </div>
+
+    <div class="field" id="field-company_size">
+      <label>Company Size</label>
+      <select id="company_size">
+        <option value="" disabled selected></option>
+        <option>1–10</option>
+        <option>11–50</option>
+        <option>51–200</option>
+        <option>201–500</option>
+        <option>500+</option>
+      </select>
+    </div>
+
+    <div class="field" id="field-industry">
+      <label>Industry</label>
+      <select id="industry">
+        <option value="" disabled selected></option>
+        <option>SaaS</option>
+        <option>E-commerce</option>
+        <option>Finance</option>
+        <option>Healthcare</option>
+        <option>Technology</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="field" id="field-challenge">
+      <label>What's your biggest challenge?</label>
+      <textarea id="challenge" placeholder="Describe the problem you're trying to solve..."></textarea>
+    </div>
+
+    <div class="field" id="field-timeline">
+      <label>What are you looking to implement?</label>
+      <select id="timeline">
+        <option value="" disabled selected></option>
+        <option>ASAP</option>
+        <option>Within 1–3 months</option>
+        <option>Within 3–6 months</option>
+        <option>Just researching</option>
+      </select>
+    </div>
+
+    <div class="field" id="field-budget">
+      <label>Estimated Budget</label>
+      <select id="budget">
+        <option value="" disabled selected></option>
+        <option>Under $1,000</option>
+        <option>$1,000–$5,000</option>
+        <option>$5,000–$20,000</option>
+        <option>$20,000+</option>
+      </select>
+    </div>
+
+    <button class="submit-btn" id="submit-btn" onclick="submitForm()">
+      <span id="btn-text">Submit →</span>
+      <div class="spinner" id="spinner"></div>
+    </button>
+
+    <p class="privacy">By submitting, you agree to our Privacy Policy. We'll never share your data.</p>
+  </div>
+
+  <div class="success-state" id="success-view">
+    <div class="success-icon">✓</div>
+    <h2>We've received your details</h2>
+    <p>Our team will review your information and reach out within one business day. Keep an eye on your inbox.</p>
+  </div>
+</div>
+
+<script>
+  // ⚠️ PASTE YOUR MAKE.COM WEBHOOK URL HERE
+  const WEBHOOK_URL = "https://hook.us2.make.com/ultvm1gntfk7siuqsx442tnoaj7n2p6s"
+  async function submitForm() {
+    clearErrors();
+
+    const fields = {
+      full_name:    document.getElementById("full_name").value.trim(),
+      work_email:   document.getElementById("work_email").value.trim(),
+      company_name: document.getElementById("company_name").value.trim(),
+      job_title:    document.getElementById("job_title").value.trim(),
+      company_size: document.getElementById("company_size").value,
+      industry:     document.getElementById("industry").value,
+      challenge:    document.getElementById("challenge").value.trim(),
+      timeline:     document.getElementById("timeline").value,
+      budget:       document.getElementById("budget").value,
+    };
+
+    // Validate required fields
+    let hasError = false;
+    if (!fields.full_name)  { showError("full_name", true);  hasError = true; }
+    if (!fields.work_email || !fields.work_email.includes("@")) {
+      showError("work_email", true); hasError = true;
+    }
+    if (!fields.company_name) { showError("company_name", true); hasError = true; }
+    if (!fields.job_title)    { showError("job_title", true);    hasError = true; }
+    if (hasError) return;
+
+    // Loading state
+    const btn = document.getElementById("submit-btn");
+    const btnText = document.getElementById("btn-text");
+    const spinner = document.getElementById("spinner");
+    btn.disabled = true;
+    btnText.textContent = "Sending...";
+    spinner.style.display = "block";
+
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(fields)
+});
+
+      // Show success
+      document.getElementById("form-view").style.display = "none";
+      document.getElementById("success-view").style.display = "block";
+
+    } catch (err) {
+      document.getElementById("error-banner").style.display = "block";
+      btn.disabled = false;
+      btnText.textContent = "Submit →";
+      spinner.style.display = "none";
+    }
+  }
+
+  function showError(id, show) {
+    const field = document.getElementById("field-" + id);
+    if (field) field.classList.toggle("has-error", show);
+  }
+
+  function clearErrors() {
+    document.querySelectorAll(".field").forEach(f => f.classList.remove("has-error"));
+    document.getElementById("error-banner").style.display = "none";
+  }
+</script>
+
+</body>
+</html>
